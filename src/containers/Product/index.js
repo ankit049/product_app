@@ -8,7 +8,7 @@ class Product extends Component {
 
   state = {
     name: '',
-    qty: ''
+    qty: '',
   }
 
   onInputChangehandler1 = (e) => {
@@ -30,6 +30,10 @@ class Product extends Component {
   render() {
     // console.log(this.state);
     // console.log(this.props.products);
+    let disable = true;
+    if(this.state.name && this.state.qty) {
+      disable = false;
+    }
 
     let form = (
       <form className="loginForm" onSubmit={this.onFormSubmit}>
@@ -38,7 +42,7 @@ class Product extends Component {
         <br />
       <input type="text" placeholder="Quantity" name='qty'
           value={this.state.qty} onChange={this.onInputChangehandler2}/>
-        <button>submit</button>
+        <button disable={disable}>submit</button>
       </form>
     );
     if(this.props.loading) {
