@@ -4,9 +4,6 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   loading: false,
   hasProduct: false,
-  userId: null,
-  name: null,
-  qty: null,
   products: []
 };
 
@@ -33,10 +30,22 @@ const reducer = (state=initialState, action) => {
         ...state,
         loading: false,
         hasProduct: true,
-        userId: action.userId,
         products: p,
-        name: action.name,
-        qty: action.qty
+      }
+
+    case actionTypes.ON_PRODUCT_DELETE:
+      let newProducts = [];
+      let da = [...state.products].map(d => {
+        if(!d[action.userId]) {
+          newProducts.push(d);
+        }
+        console.log(d[action.userId]);
+        return (d)
+      });
+      console.log(newProducts);
+      return {
+        ...state,
+        products: newProducts,
       }
     default: return state;
 

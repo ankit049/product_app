@@ -59,16 +59,19 @@ class Product extends Component {
               <ul key={key}>
                 <li>Product Name : {product[this.props.userId]['name']}</li>
                 <li>Product QTY : {product[this.props.userId]['qty']}</li>
+              {/* <li><button onClick={() => this.props.onProductDelete(product[this.props.userId]['name'], product[this.props.userId]['qty'], this.props.userId)}>Delete</button></li> */}
               </ul>
             )
           }
         }
       });
     }
+
     return (
       <div className="auth">
         {form}
       <hr/>
+      <p><button onClick={() => this.props.onProductDelete(this.props.userId)}>Delete</button></p>
       <div>
         {productDetails ? productDetails : noProduct}
       </div>
@@ -92,6 +95,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onProduct: (name, qty, userId) => dispatch(actions.onProduct(name, qty, userId)),
+    onProductDelete: (userId) => dispatch(actions.productDelete(userId)),
   }
 }
 

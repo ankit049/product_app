@@ -4,5 +4,6 @@ export {
 } from './auth';
 
 export {
-  onProduct
+  onProduct,
+  productDelete
 } from './product';

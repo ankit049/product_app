@@ -31,3 +31,10 @@ export const onProduct = (name, qty, userId) => {
     }, 2000);
   }
 }
+
+export const productDelete = (userId) => {
+  return {
+    type: actionTypes.ON_PRODUCT_DELETE,
+    userId: userId,
+  }
+}
