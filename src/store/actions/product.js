@@ -10,17 +10,19 @@ export const productStart = () => {
 export const productSuccess = (productData) => {
   return {
     type: actionTypes.ON_PRODUCT_SUCCESS,
+    id: productData.id,
     userId: productData.userId,
     name: productData.name,
     qty: productData.qty
   }
 }
 
-export const onProduct = (name, qty, userId) => {
+export const onProduct = (id, name, qty, userId) => {
   return dispatch => {
     dispatch(productStart());
 
     const productData = {
+      id: id,
       name: name,
       qty: qty,
       userId: userId,
@@ -28,13 +30,14 @@ export const onProduct = (name, qty, userId) => {
 
     setTimeout(() => {
       dispatch(productSuccess(productData));
-    }, 2000);
+    }, 1000);
   }
 }
 
-export const productDelete = (userId) => {
+export const productDelete = (pid, userId) => {
   return {
     type: actionTypes.ON_PRODUCT_DELETE,
+    id: pid,
     userId: userId,
   }
 }

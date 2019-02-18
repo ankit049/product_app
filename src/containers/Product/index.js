@@ -7,42 +7,43 @@ import '../Auth/Auth.css';
 class Product extends Component {
 
   state = {
-    name: '',
-    qty: '',
+    productForm: {
+      id: '',
+      name: '',
+      qty: ''
+    }
   }
 
-  onInputChangehandler1 = (e) => {
+  onInputChangehandler = (e, inputIdentifier) => {
+    const updateCurrentProductForm = {
+      ...this.state.productForm
+    }
+    updateCurrentProductForm[inputIdentifier] = e.target.value;
+    // console.log(updateCurrentProductForm[inputIdentifier]);
     this.setState({
-      name: e.target.value
-    });
-  }
-  onInputChangehandler2 = (e) => {
-    this.setState({
-      qty: e.target.value
+      productForm: updateCurrentProductForm
     });
   }
 
   onFormSubmit = (e) => {
     e.preventDefault();
-    this.props.onProduct(this.state.name, this.state.qty, this.props.userId);
+    this.props.onProduct(this.state.productForm.id, this.state.productForm.name, this.state.productForm.qty, this.props.userId);
   }
 
   render() {
     // console.log(this.state);
     // console.log(this.props.products);
-    let disable = true;
-    if(this.state.name && this.state.qty) {
-      disable = false;
-    }
-
     let form = (
       <form className="loginForm" onSubmit={this.onFormSubmit}>
+        <input type="text" placeholder="Product ID" name='id'
+          value={this.state.productForm.id} onChange={(event) => this.onInputChangehandler(event, 'id')}/>
+        <br />
         <input type="text" placeholder="Product Name" name='name'
-          value={this.state.name} onChange={this.onInputChangehandler1}/>
+          value={this.state.productForm.name} onChange={(event) => this.onInputChangehandler(event, 'name')}/>
         <br />
       <input type="text" placeholder="Quantity" name='qty'
-          value={this.state.qty} onChange={this.onInputChangehandler2}/>
-        <button disable={disable}>submit</button>
+          value={this.state.productForm.qty} onChange={(event) => this.onInputChangehandler(event, 'qty')}/>
+        <button>Add</button>
       </form>
     );
     if(this.props.loading) {
@@ -57,9 +58,10 @@ class Product extends Component {
           if(product[this.props.userId]['hasProduct']) {
             return (
               <ul key={key}>
+                <li>Product ID : {product[this.props.userId]['id']}</li>
                 <li>Product Name : {product[this.props.userId]['name']}</li>
                 <li>Product QTY : {product[this.props.userId]['qty']}</li>
-              {/* <li><button onClick={() => this.props.onProductDelete(product[this.props.userId]['name'], product[this.props.userId]['qty'], this.props.userId)}>Delete</button></li> */}
+                <li><button onClick={() => this.props.onProductDelete(product[this.props.userId]['id'], this.props.userId)}>Delete</button></li>
               </ul>
             )
           }
@@ -70,8 +72,6 @@ class Product extends Component {
     return (
       <div className="auth">
         {form}
-      <hr/>
-      <p><button onClick={() => this.props.onProductDelete(this.props.userId)}>Delete</button></p>
       <div>
         {productDetails ? productDetails : noProduct}
       </div>
@@ -86,6 +86,7 @@ const mapStateToProps = state => {
     isAuthenticated: state.auth.token !== null,
     userId: state.auth.userId,
     hasProduct: state.product.hasProduct,
+    id: state.product.id,
     name: state.product.name,
     qty: state.product.qty,
     products: state.product.products
@@ -94,8 +95,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onProduct: (name, qty, userId) => dispatch(actions.onProduct(name, qty, userId)),
-    onProductDelete: (userId) => dispatch(actions.productDelete(userId)),
+    onProduct: (id, name, qty, userId) => dispatch(actions.onProduct(id, name, qty, userId)),
+    onProductDelete: (pid, userId) => dispatch(actions.productDelete(pid, userId)),
   }
 }
 

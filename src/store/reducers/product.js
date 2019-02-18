@@ -18,6 +18,7 @@ const reducer = (state=initialState, action) => {
     case actionTypes.ON_PRODUCT_SUCCESS:
       let d = {};
       d[action.userId] = {
+        id: action.id,
         name: action.name,
         qty: action.qty,
         hasProduct: true
@@ -36,13 +37,20 @@ const reducer = (state=initialState, action) => {
     case actionTypes.ON_PRODUCT_DELETE:
       let newProducts = [];
       let da = [...state.products].map(d => {
-        if(!d[action.userId]) {
+        if(d[action.userId] && d[action.userId]['id'] !== action.id ) {
+          // console.log(d[action.userId]['id']);
           newProducts.push(d);
+        } else {
+          if(!d[action.userId]) {
+            // console.log(d[action.userId]['id']);
+            newProducts.push(d);
+          }
         }
-        console.log(d[action.userId]);
+        // console.log(d[action.userId]);
         return (d)
       });
       console.log(newProducts);
+
       return {
         ...state,
         products: newProducts,
